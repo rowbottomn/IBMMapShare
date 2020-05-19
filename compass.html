@@ -1,0 +1,63 @@
+<DOCTYPE html>
+<html>
+  <head>
+        <meta name="viewport" content="initial-scale=1.0">
+    <style>
+      
+      #compass{
+        width:50%;
+        transform-origin: 50% 50%;
+        -webkit-transform-origin: 50% 50%;
+        -moz-transform-origin: 50% 50%;
+      }
+      body {
+  background-color: #cccccc; 
+}
+
+    </style>
+    <script>
+      function init() {
+        var compass = document.getElementById('compass');
+        if(window.DeviceOrientationEvent) {
+  
+          window.addEventListener('deviceorientation', function(event) {
+                var alpha;
+                //Check for iOS property
+                if(event.webkitCompassHeading) {
+                  alpha = event.webkitCompassHeading;
+                  //Rotation is reversed for iOS
+                  compass.style.WebkitTransform = 'rotate(-' + alpha + 'deg)';
+                }
+                //non iOS
+                else {
+                  alpha = event.alpha;
+                  webkitAlpha = alpha;
+                  if(!window.chrome) {
+                    //Assume Android stock (this is crude, but good enough for our example) and apply offset
+                    webkitAlpha = alpha-270;
+                  }
+                }
+ 
+                compass.style.Transform = 'rotate(' + alpha + 'deg)';
+                compass.style.WebkitTransform = 'rotate('+ webkitAlpha + 'deg)';
+                //Rotation is reversed for FF
+                compass.style.MozTransform = 'rotate(-' + alpha + 'deg)'; 
+              }, false);
+        }
+      }
+
+
+
+    </script>
+  </head>
+  <h1>Compass</h1>
+  <body onload="init()">
+    <div id="compassContainer">
+      <img src="compass5.png" id="compass"/>
+    </div>
+  <div id="compassinfo">
+    </div>
+ </body><br>
+ <iframe src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://optimalstarkfield.mvankempen.repl.co/compass.html" title="QRCode" height=150 width=150></iframe>
+
+</html>

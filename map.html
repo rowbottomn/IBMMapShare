@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 700px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+  </head>
+  <body>
+    <h3>My Position & Maps</h3>
+    <!--The div element for the map -->
+    <div id="map"></div>
+    <script>
+// Initialize and add the map
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+var mypos;
+function showPosition(position) {
+    console.log(position)
+    mypos=position
+    initMap() 
+} 
+
+
+function initMap() {
+  // The location of Uluru
+  getLocation()
+  var uluru = {lat:mypos.coords.latitude, lng: mypos.coords.longitude};
+  // The map, centered at Uluru
+  var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 4, center: uluru});
+  // The marker, positioned at Uluru
+  var marker = new google.maps.Marker({position: uluru, map: map});
+}
+
+
+ var x = document.getElementById("demo");
+   getLocation()
+
+let socket = new WebSocket("wss://thinklab1239.mybluemix.net/ws/snp");
+
+socket.onopen = function(e) {
+  console.log("[open] Connection established");
+   console.log("Sending to server");
+  socket.send("My name is John");
+  mymsg = { "name":"John", "id":30 };
+
+  mymsg.event="coordinates"
+  mymsg.name="John"
+  mymsg.id="10"
+  mymsg.lon=mypos.coords.longitude
+  mymsg.lat=mypos.coords.latitude
+  socket.send(JSON.stringify(mymsg));
+  console.log(mymsg)
+};
+
+socket.onmessage = function(event) {
+   console.log(`[message] Data received from server: ${event.data}`);
+};
+
+socket.onclose = function(event) {
+  if (event.wasClean) {
+     console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+  } else {
+    // e.g. server process killed or network down
+    // event.code is usually 1006 in this case
+     console.log('[close] Connection died');
+  }
+};
+
+socket.onerror = function(error) {
+   console.log(`[error] ${error.message}`);
+};
+
+
+
+    </script>
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback parameter executes the initMap() function
+    -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAu2aF0czDYjAT3hAwKKZSpTm_e57VbDzs&callback=getLocation">
+    </script>
+  </body>
+</html>
