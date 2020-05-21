@@ -1,4 +1,24 @@
-      #map {
-        height: 400px;  /* The height is 400 pixels */
-        width: 100%;  /* The width is the width of the web page */
-       }
+body{
+  font-family:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+}
+
+#map {
+  height: 500px;  /* The height is 400 pixels */
+  width: 100%;  /* The width is the width of the web page */
+}
+input[type=text] {
+  width: 100%;
+  max-width: 350px;
+  min-width: 150px;
+  padding: 10px 20px;
+  margin: 10px ;
+}
+
+label{
+  width: 80px;
+  display: inline-block;
+}
+
+input[type=text]:focus {
+  background-color: lightblue;
+}
